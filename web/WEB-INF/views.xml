@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+     
+    <bean id="excelView" class="hrms.view.EmployeeExcelBuilder" />
+    <bean id="wrrScheduleView" class="hrms.view.WRRScheduleExcel" />
+    <bean id="annualIncomeTaxView" class="hrms.view.AnnualIncomeTaxReport" />
+    <bean id="gisAndFaPDFView" class="hrms.view.GisAndFaPDFView" />
+    <bean id="billContributionPDFView" class="hrms.view.BillContributionPDFView" />
+    <bean id="investmentDeclarationPDFView" class="hrms.view.InvestmentDeclarationPDFView" />
+    <bean id="licSchedulePDFView" class="hrms.view.LICSchedulePDFView" />
+    <bean id="pliSchedulePDFView" class="hrms.view.PLISchedulePDFView" />
+    <bean id="tpfSchedulePDFView" class="hrms.view.TPFSchedulePDFView" />
+    <bean id="auditRecoveryPDFView" class="hrms.view.AuditRecoveryPDFView" />
+    <bean id="vacencyStmtPDFView" class="hrms.view.VacencyStmtPDFView" />
+    <bean id="bankAccountPDFView" class="hrms.view.BankAccountPDFView" />
+    <bean id="voucherSlipPDFView" class="hrms.view.VoucherSlipPDFView" />
+    <bean id="excessPayPDFView" class="hrms.view.ExcessPayPDFView" />
+    <bean id="nrcPDFView" class="hrms.view.NRCPDFView" />
+    <bean id="parPDFView" class="hrms.view.ParPdfView" />
+    <bean id="parPdfViewApprise" class="hrms.view.ParPdfViewApprise" />
+    <bean id="parStatementReportExcel" class="hrms.view.ParStatementReportExcel"/>
+    <bean id="parStatementReportPdf" class="hrms.view.ParStatementReport"/>
+    <bean id="paySlipPdfView" class="hrms.view.PaySlipPdfView" />
+    <bean id="nominationDetailPdfView" class="hrms.view.NominationDetailPDFView" />
+    <bean id="groupCCustodianReportPdfView" class="hrms.view.GroupCCustodianReportPdfView" />
+    <bean id="pendingPARAtAuthorityExcel" class="hrms.view.PendingPARAtAuthorityExcel" />
+    <bean id="transferProposalPdfView" class="hrms.view.TransferProposalPdfView" />
+    <bean id="groupCEmployeeForReportingPdf" class="hrms.view.GroupCEmployeeForReporting" />
+    <bean id="SentMessageDetailPDF" class="hrms.view.SentMessageDetailPDF" />
+    <bean id="districtWiseMedalNomination" class="hrms.view.DistrictWiseMedalNomination" />
+    <bean id="awardMedalPDF" class="hrms.view.AwardMedalPDF"/>
+    <bean id="queryDataExcel" class="hrms.view.QueryDataExcel" />
+    <bean id="groupCEmployeeForAppraiseePdf" class="hrms.view.GroupCEmployeeForAppraisee" />
+    <bean id="SiParPdfView" class="hrms.view.SiParPdfView"/>
+    <bean id="empAttendanceData" class="hrms.view.EmpAttendanceData"/>
+    <bean id="siParAdvRemarkIntimation" class="hrms.view.SiParAdverseRemarkIntimationPDF"/>
+    <bean id="siPARNotInitiatedExcel" class="hrms.view.SiPARNotInitiatedExcel"/>
+</beans>

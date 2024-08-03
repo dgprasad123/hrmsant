@@ -1,0 +1,12 @@
+CKEDITOR.editorConfig = function( config ) {
+	config.toolbar = [
+        
+		{ name: 'editing',     groups: [ 'spellchecker' ] },
+		
+		'/',
+		{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline' ] },
+		{ name: 'paragraph', items: [ 'NumberedList' ] },
+	];
+	config.enterMode = CKEDITOR.ENTER_BR;
+        //config.entities_processNumerical = 'force';
+};

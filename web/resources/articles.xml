@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<linked-list>
+    <article xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:type="java:com.hmkcode.vo.Article">
+        <categories xsi:type="java:java.lang.String">Spring</categories>
+        <tags xsi:type="java:java.lang.String">Spring</tags>
+        <tags xsi:type="java:java.lang.String">JSON</tags>
+        <tags xsi:type="java:java.lang.String">XML</tags>
+        <tags xsi:type="java:java.lang.String">iText</tags>
+        <tags xsi:type="java:java.lang.String">Apache POI</tags>
+        <url>http://hmkcode.com/spring-mvc-view-json-xml-pdf-or-excel/</url>
+        <title> Spring MVC View (JSON, XML, PDF or Excel) </title>
+    </article>
+</linked-list>

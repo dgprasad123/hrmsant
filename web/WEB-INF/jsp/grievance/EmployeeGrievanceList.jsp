@@ -1,0 +1,95 @@
+<%-- 
+    Document   : EmployeeGrievanceList
+    Created on : Jan 6, 2018, 2:56:34 PM
+    Author     : Manas
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>:: HRMS, Government of Odisha ::</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <script src="js/jquery.min.js" type="text/javascript"></script>        
+        <script src="js/bootstrap.min.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <div class="col-md-12 col-sm-12" align="right" style="margin-bottom:10px;">
+            <p style="color:#4CB848;font-weight:bold;" align="center"></p>
+            <form:form action="employeeGrievanceEntry.htm" method="post">
+                <input type="submit" class="btn btn-success" name="ADD" value="ADD NEW GRIEVANCE"/>
+            </form:form>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr style="font-weight:bold;background:#3E6A00;color:#FFFFFF;">
+                            <td>Sl No</td>
+                            <td>Category</td>                            			
+                            <td>Mobile</td>
+                            <td>Grievance</td>
+                            <td>Status</td>
+                            <td>Download</td>
+                            <td>Date</td>
+                            <td colspan="3">Actions</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${grievncelist}" var="grievnce" varStatus="cnt">
+                            <tr>
+                                <td>${cnt.index + 1}</td>
+                                <td>${grievnce.category}</td>
+                                <td>${grievnce.appmobile}</td>
+                                <td>${grievnce.grievanceDetail}</td>
+                                <td>
+                                    <c:if test="${grievnce.isdisposed == 'Y'}">
+                                        Disposed
+                                    </c:if>
+                                    <c:if test="${grievnce.isdisposed != 'Y'}">
+                                        Processing
+                                    </c:if>
+                                </td>
+                                <td>
+                                    <c:if test="${grievnce.isdisposed == 'Y'}">
+
+                                    </c:if>
+                                </td>
+                                <td>${grievnce.grievanceTime}</td>
+                                <td width="20" align="center"><a href="employeeGrievanceDtls.htm?gid=${grievnce.gid}"><img src="images/details.gif"></a></td>
+                                <td width="20" align="center">
+                                    <c:if test="${grievnce.isforwarded == 'Y'}">
+                                        <img src="images/edit_disabled.gif" />
+                                    </c:if>
+                                    <c:if test="${(grievnce.isforwarded != 'Y') and (grievnce.isdisposed != 'Y') and (grievnce.isrejected != 'Y')}">
+                                        <a href="editEmployeeGrievance.htm?gid=${grievnce.gid}"><img src="images/edit.gif" /></a>
+                                    </c:if>
+                                </td>
+                                <td width="20" align="center">
+                                    <c:choose>
+                                        <c:when test="${grievnce.isforwarded == 'Y' || grievnce.isdisposed == 'Y'}">
+                                            <img src="images/pass.png"/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img src="images/next1.png" onClick="confirmForward1('${grievnce.gid}')"/>
+                                        </c:otherwise>
+                                    </c:choose>                                    
+                                </td>
+                            </tr>
+                        </c:forEach>
+                        <c:if test="${fn:length(grievncelist) eq 0}">
+                            <tr>
+                                <td colspan="10" align="center" style="color:#FF0000;font-weight:bold;">No Grievance Found!</td>
+                            </tr>
+                        </c:if>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

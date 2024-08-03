@@ -1,0 +1,2274 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!-- was: <?xml version="1.0" encoding="UTF-8"?> -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:ws="http://jax-ws.dev.java.net/spring/core"
+       xmlns:wss="http://jax-ws.dev.java.net/spring/servlet"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        http://jax-ws.dev.java.net/spring/core
+        http://jax-ws.dev.java.net/spring/core.xsd
+        http://jax-ws.dev.java.net/spring/servlet
+        http://jax-ws.dev.java.net/spring/servlet.xsd">
+    <tx:annotation-driven/>
+    <wss:binding url="/eQuaterService">
+        <wss:service>            
+            <ws:service bean="#equaterWs"/>
+        </wss:service>
+    </wss:binding>
+    <wss:binding url="/EmployeeService">
+        <wss:service>            
+            <ws:service bean="#employeeWs"/>
+        </wss:service>
+    </wss:binding>
+    <wss:binding url="/LoginService">
+        <wss:service>            
+            <ws:service bean="#loginWs"/>
+        </wss:service>
+    </wss:binding>
+    <wss:binding url="/TaskService">
+        <wss:service>            
+            <ws:service bean="#taskWs"/>
+        </wss:service>
+    </wss:binding>
+    <wss:binding url="/EmployeeServiceForLMS">
+        <wss:service>            
+            <ws:service bean="#employeeWsForLMS"/>
+        </wss:service>
+    </wss:binding>
+
+    <!--     code for local db connection    -->
+   
+   <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="jdbc/HRMSDSHOME"></property>
+        <property name="resourceRef" value="true" />
+    </bean>
+    <bean id="repodataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="jdbc/HRMSDSHOME"></property>
+        <property name="resourceRef" value="true" />
+    </bean> 
+     
+    <!-- code for vpn production db connection 
+    
+    <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="jdbc/HRMSDSHOMEPROD"></property>
+        <property name="resourceRef" value="true" />
+    </bean>
+    <bean id="repodataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="jdbc/REPOHRMSDSHOMEPRODVPN"></property>
+        <property name="resourceRef" value="true" />
+    </bean> -->
+  
+   
+    <bean id="employeeWs" class="hrms.ws.EmployeeWS">
+        <property name="employeeDAO" ref="employeeDAO" />
+        <property name="leaveApplyDAO" ref="leaveApplyDAO" />
+        <property name="payslipDao" ref="payslipDao"/>
+        <property name="transferDao" ref="transferDao" />
+                
+    </bean>
+    <bean id="loginDao" class="hrms.dao.login.LoginDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    
+    
+    
+    
+    <bean id="loginService" class="hrms.dao.login.LoginServiceImpl">
+        <property name="loginDao" ref="loginDao"/>
+    </bean>
+    <bean id="taskDAO" class="hrms.dao.task.TaskDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    
+    <bean id="changepwdDao" class="hrms.dao.changepassword.ChangePasswordDAOImpl">
+        
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="maxPARIdDAO" class="hrms.dao.performanceappraisal.MaxPARIdDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="maxPARAbsenteeIdDAO" class="hrms.dao.performanceappraisal.MaxPARAbsenteeIDDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="maxPARAchievementIdDAO" class="hrms.dao.performanceappraisal.MaxPARAchievementIDDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="maxPAROtherDetailsIdDAO" class="hrms.dao.performanceappraisal.MaxPAROtherDetailsIDDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="parAdminDAO" class="hrms.dao.performanceappraisal.PARAdminDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+        <property name="uploadPath" value="D:\GroupC Promotion"/> 
+    </bean>
+    <bean id="parbrowserDao" class="hrms.dao.performanceappraisal.PARBrowserDAOImpl">
+        
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        
+        <property name="maxPARIdDAO">
+            <ref bean="maxPARIdDAO" />
+        </property>
+        <property name="maxPARAbsenteeIdDAO">
+            <ref bean="maxPARAbsenteeIdDAO" />
+        </property>
+        <property name="maxPARAchievementIdDAO">
+            <ref bean="maxPARAchievementIdDAO" />
+        </property>
+        <property name="maxPAROtherDetailsIdDAO">
+            <ref bean="maxPAROtherDetailsIdDAO" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    
+    <bean id="arrmastDAO" class="hrms.dao.payroll.arrear.ArrmastDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    
+    <bean id="fiscalDAO" class="hrms.dao.fiscalyear.FiscalYearDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="leaveApplyDAO" class="hrms.dao.leaveapply.LeaveApplyDAOImpl">
+        <property name="maxleaveidDao">
+            <ref bean="maxleaveidDao" />
+        </property>
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        
+    </bean>
+    <bean id="maxleaveidDao" class="hrms.dao.leaveapply.MaxLeaveIdDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+        
+    <bean id="leaveAuthorityDAO" class="hrms.dao.leaveauthority.LeaveAuthorityDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>    
+    
+    <bean id="offDAO" class="hrms.dao.master.OfficeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="substantivePostDAO" class="hrms.dao.master.SubStantivePostDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    
+    <bean id="sactionedAuthorityDao" class="hrms.dao.preferauthority.SactionedAuthorityDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="tabDAO" class="hrms.dao.tab.TabDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    <bean id="servicePanelDAO" class="hrms.dao.tab.ServicePanelDAOImpl">
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    <bean id="billBrowserDao" class="hrms.dao.payroll.billbrowser.BillBrowserDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="aqReportDao" class="hrms.dao.payroll.billbrowser.AqReportDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+        <property name="aqfunctionalities">
+            <ref bean="aqfunctionalities"/>
+        </property>
+    </bean>
+    <bean id="tpfScheduleDao" class="hrms.dao.payroll.tpschedule.TPFScheduleDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="privilegeManagementDAO" class="hrms.dao.privilege.PrivilegeManagementDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="vouchingServicesDAOImpl" class="hrms.dao.billvouchingTreasury.VouchingServicesDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="annualIncomeTaxDao" class="hrms.dao.payroll.annualincometaxreport.AnnualTaxReportDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="incrementProposalDao" class="hrms.dao.incrementProposal.IncrementProposalDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>       
+    </bean>  
+    <bean id="treasuryDao" class="hrms.dao.master.TreasuryDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>        
+    </bean>
+    <bean id="payslipDao" class="hrms.dao.payroll.payslip.PaySlipDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+
+    </bean>
+    <bean id="comonScheduleDao" class="hrms.dao.payroll.schedule.ScheduleDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+        <property name="comonScheduleDao" ref="comonScheduleDao" />
+    </bean>
+    <!-- Web service methods -->
+    <bean id="equaterWs" class="hrms.ws.EquaterWS">
+        <property name="scheduleDAO" ref="comonScheduleDao" />
+        <property name="empQuarterAllotDAO" ref="empQuarterAllotDAO" />
+    </bean>
+    <bean id="employeeDAO" class="hrms.dao.employee.EmployeeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+        <property name="uploadPath" value="/workflow/alfaodisha"/>                    
+    </bean>
+    <bean id="maxnotiidDao" class="hrms.dao.notification.MaxNotificationIdDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="notificationDao" class="hrms.dao.notification.NotificationDAOImpl">
+        <property name="maxnotiidDao">
+            <ref bean="maxnotiidDao" />
+        </property>
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <!--        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>-->
+    </bean>
+    <!-- Master Module DAO-->
+
+    <bean id="districtDAO" class="hrms.dao.master.DistrictDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="postDAO" class="hrms.dao.master.PostDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="trainingcalendarDao" class="hrms.dao.trainingadmin.TrainingCalendarDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="allowanceDeductionDAO" class="hrms.dao.payroll.allowancededcution.AllowanceDeductionDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean> 
+    
+    <bean id="departmentDao" class="hrms.dao.master.DepartmentDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="officeDao" class="hrms.dao.master.OfficeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean> 
+    <bean id="subStantivePostDao" class="hrms.dao.master.SubStantivePostDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    <bean id="loanworkflowDao" class="hrms.dao.loanworkflow.LoanApplyDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="loanSancDAO" class="hrms.dao.loansanction.LoanSancDAOImpl">
+        <property name="maxloanidDao">
+            <ref bean="maxloanidDao" />
+        </property>
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    <bean id="maxloanidDao" class="hrms.dao.loansanction.MaxLoanIdDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="sectionDefinationDAO" class="hrms.dao.payroll.billbrowser.SectionDefinationDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="moduleDAO" class="hrms.dao.master.ModuleDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="maxTransferIdDao" class="hrms.dao.transfer.MaxTransferIdDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    
+    <bean id="maxRelieveIdDao" class="hrms.dao.relieve.MaxRelieveIdDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="reliveDao" class="hrms.dao.relieve.RelieveDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="maxRelieveIdDao">
+            <ref bean="maxRelieveIdDao" />
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    
+    <bean id="emppayrecordDAO" class="hrms.dao.emppayrecord.EmpPayRecordDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        
+    </bean>
+    <bean id="transferDao" class="hrms.dao.transfer.TransferDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="maxTransferIdDao">
+            <ref bean="maxTransferIdDao"/>
+        </property>
+        <property name="emppayrecordDAO">
+            <ref bean="emppayrecordDAO"/>
+        </property>
+        
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+        
+    </bean>
+    <bean id="processStatusDAO" class="hrms.dao.master.ProcessStatusDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="payscaleDAO" class="hrms.dao.master.PayScaleDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="calendarDAO" class="hrms.dao.calendar.CalendarDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="maxJoiningIdDAO" class="hrms.dao.joining.MaxJoiningIdDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="joiningDAO" class="hrms.dao.joining.JoiningDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+        <property name="maxJoiningIdDAO">
+            <ref bean="maxJoiningIdDAO" />
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    <bean id="propertyStatementDAO" class="hrms.dao.propertystatement.PropertyStatementDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="propertyMasterDAOImpl" class="hrms.dao.master.PropertyMasterDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="bankDAO" class="hrms.dao.master.BankDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>        
+    </bean>
+    <bean id="branchDAO" class="hrms.dao.master.BranchDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>        
+    </bean>
+    <bean id="loanTypeDao" class="hrms.dao.master.LoanTypeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>        
+    </bean>
+    <bean id="cadreEmployeeReportDAO" class="hrms.dao.misreport.CadreEmployeeReportDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="stateDAOImpl" class="hrms.dao.master.StateDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="leaveTypeDAO" class="hrms.dao.master.LeaveTypeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>        
+    </bean>
+    <bean id="leaveActionTypeDAO" class="hrms.dao.master.LeaveActionTypeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>        
+    </bean>
+    <bean id="instituteDAO" class="hrms.dao.master.InstituteDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean> 
+    <bean id="billGroupDAO" class="hrms.dao.payroll.billbrowser.BillGroupDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="licDAO" class="hrms.dao.lic.LicDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="tpfreportDAO" class="hrms.dao.tpfreport.TPFReportsDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="loginWs" class="hrms.ws.LoginWS">
+        <property name="loginDao" ref="loginDao" />        
+    </bean>
+    <bean id="taskWs" class="hrms.ws.TaskWS">
+        <property name="taskDAO" ref="taskDAO" />
+        <property name="leaveApplyDAO" ref="leaveApplyDAO" /> 
+        <property name="parbrowserDao" ref="parbrowserDao" /> 
+        <property name="loanworkflowDao" ref="loanworkflowDao" /> 
+        <property name="propertyStatementDAO" ref="propertyStatementDAO" />
+        <property name="leaveTypeDAO" ref="leaveTypeDAO"/>
+        <property name="workflowRoutingDao" ref="workflowRoutingDao"/>
+        <property name="leaveActionTypeDAO" ref="leaveActionTypeDAO"/>
+    </bean>
+    
+    <bean id="changeMobileDAO" class="hrms.dao.changemobile.ChangeMobileDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="changeAadhaarDAO" class="hrms.dao.changeaadhaar.ChangeAadhaarDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="licreportDAO" class="hrms.dao.licreport.LICReportDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="discProcedDAO" class="hrms.dao.discProceeding.DiscProceedingImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="uploadPath" value="D:\Disciplinary Proceeding"/>
+    </bean>
+    
+    <bean id="cadreDAO" class="hrms.dao.master.CadreDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="maxCadreIdDAO">
+            <ref bean="maxCadreIdDAO" />
+        </property>
+    </bean>
+    <bean id="empinfoDAO" class="hrms.dao.empinfo.EmployeeInformationDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="empAbsenteeDAO" class="hrms.dao.absenteestmt.EmpAbsenteeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="maxDeputationIdDAO" class="hrms.dao.deputation.MaxDeputationIdDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="deputationDAO" class="hrms.dao.deputation.DeputationDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="maxDeputationIdDAO">
+            <ref bean="maxDeputationIdDAO" />
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    <bean id="contractualHeldupDAO" class="hrms.dao.heldup.ContractualHeldUpDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="regularHeldUpDAO" class="hrms.dao.heldup.RegularHeldUpDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="additionalChargeDAO" class="hrms.dao.additionalCharge.AdditionalChargeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+       
+    </bean>
+    <bean id="maxIncrementIdDao" class="hrms.dao.incrementsanction.MaxIncrementIdDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="incrementsancDAO" class="hrms.dao.incrementsanction.IncrementSanctionDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+        <property name="emppayrecordDAO">
+            <ref bean="emppayrecordDAO"/>
+        </property>
+        <property name="empinfoDAO">
+            <ref bean="empinfoDAO"/>
+        </property>
+        <property name="notificationDao">
+            <ref bean="notificationDao"/>
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    <bean id="unlockuserDAO" class="hrms.dao.unlockuser.UnlockuserDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="deptDataEntryDAO" class="hrms.dao.miscellaneous.DeptDataEntryDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="absorptionDAO" class="hrms.dao.absorption.AbsorptionDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="emppayrecordDAO">
+            <ref bean="emppayrecordDAO"/>
+        </property>
+        <property name="cadreDAO">
+            <ref bean="cadreDAO"/>
+        </property>
+        <property name="notificationDao">
+            <ref bean="notificationDao" />
+        </property> 
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+
+    </bean>
+    
+    <bean id="redeploymentDAO" class="hrms.dao.redeployment.RedeploymentDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="emppayrecordDAO">
+            <ref bean="emppayrecordDAO"/>
+        </property>
+        <property name="cadreDAO">
+            <ref bean="cadreDAO"/>
+        </property>
+        <property name="notificationDao">
+            <ref bean="notificationDao" />
+        </property> 
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    <bean id="redesignationDAO" class="hrms.dao.redesignation.RedesignationDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="emppayrecordDAO">
+            <ref bean="emppayrecordDAO"/>
+        </property>
+        <property name="maxTransferIdDao">
+            <ref bean="maxTransferIdDao"/>
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    
+    <bean id="repatriationDAO" class="hrms.dao.repatriation.RepatriationDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="emppayrecordDAO">
+            <ref bean="emppayrecordDAO"/>
+        </property>
+        <property name="cadreDAO">
+            <ref bean="cadreDAO"/>
+        </property>          
+        <property name="notificationDao">
+            <ref bean="notificationDao" />
+        </property> 
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>   
+    <bean id="terminationDAO" class="hrms.dao.termination.TerminationDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+       
+    </bean>
+    <bean id="resignationDAO" class="hrms.dao.resignation.ResignationDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+       
+    </bean>
+    <bean id="retrenchmentDAO" class="hrms.dao.retrenchment.RetrenchmentDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+       
+    </bean>
+    <bean id="reemploymentDAO" class="hrms.dao.reemployment.ReemploymentDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+       
+    </bean> 
+    <bean id="qtrallotmentDAO" class="hrms.dao.qtrallotment.QuarterAllotmentDAOImpl">
+        
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="laMembersDAO" class="hrms.dao.master.LAMembersDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    <bean id="officiatingDAO" class="hrms.dao.master.OfficiatingDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    <bean id="userExpertiseDAO" class="hrms.dao.master.UserExpertiseDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="officewisesecondschedulelistDAO" class="hrms.dao.payroll.officewisesecondschedulelist.OfficeWiseSecondScheduleListDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="thirdSchedleDAO" class="hrms.dao.payroll.thirdschedule.ThirdScheduleDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    <bean id="thirdSchedleCheckingAuthDAO" class="hrms.dao.payroll.thirdscheduleCheckingAuth.ThirdScheduleCheckingAuthDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="onlineTicketDAO" class="hrms.dao.onlineTicketing.OnlineTicketingDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="ticketTopicDAO" class="hrms.dao.master.OnlineTicketTopicDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="thirdSchedleVerifyingAuthDAO" class="hrms.dao.payroll.thirdscheduleVerifyingAuth.ThirdScheduleVerifyingAuthDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="paybillDmpDao" class="hrms.dao.payroll.schedule.PayBillDMPDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+
+    <bean id="billFrontPageDmpDao" class="hrms.dao.payroll.schedule.BillFrontpageDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="payrollService" class="hrms.dao.payroll.services.PayRollServices">
+        <property name="paybillDmpDao" ref="paybillDmpDao"/>
+        <property name="billFrontPageDmpDao" ref="billFrontPageDmpDao"/>
+    </bean>
+    
+    <bean id="bankScheduleService" class="hrms.dao.payroll.services.BankScheduleServices">
+        <property name="aqReportDAO" ref="aqReportDao"/>
+        <property name="paybillDmpDao" ref="paybillDmpDao"/>
+    </bean>
+    
+    <bean id="itScheduleService" class="hrms.dao.payroll.services.ITScheduleServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+        <property name="paybillDmpDao" ref="paybillDmpDao"/>
+    </bean>
+    
+    <bean id="piAdvIntRecServices" class="hrms.dao.payroll.services.PIAdvIntRecServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+        <property name="aqReportDao" ref="aqReportDao"/>
+    </bean>
+    
+    <bean id="piAdvPriRecServices" class="hrms.dao.payroll.services.PIAdvPriRecScheduleServices">
+        <property name="paybillDmpDao" ref="paybillDmpDao"/>
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+        <property name="aqReportDao" ref="aqReportDao"/>
+    </bean>
+    
+    <bean id="ptservice" class="hrms.dao.payroll.services.PTScheduleServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+    </bean>
+    
+    <bean id="gpfservice" class="hrms.dao.payroll.services.GPFScheduleServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+    </bean>
+    <bean id="pvtlService" class="hrms.dao.payroll.services.PrivateLoanScheduleServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+    </bean>
+    
+    <bean id="hrrServ" class="hrms.dao.payroll.services.HRRScheduleServices">
+        <property name="paybillDmpDao" ref="paybillDmpDao"/>
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+    </bean>
+    
+    <bean id="threadServiceDAO" class="hrms.dao.thread.ThreadServiceDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="billMastDAO" class="hrms.dao.payroll.billmast.BillMastDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    <bean id="processArrearBillService" class="hrms.service.ProcessArrearBillService">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="billMastDAO">
+            <ref bean="billMastDAO" />
+        </property>
+        <property name="billGroupDAO">
+            <ref bean="billGroupDAO" />
+        </property>
+        <property name="sectionDefinationDAO">
+            <ref bean="sectionDefinationDAO" />
+        </property>
+        <property name="arrmastDAO">
+            <ref bean="arrmastDAO" />
+        </property>
+    </bean>
+    <bean id="processPayBillService" class="hrms.service.ProcessPayBillService">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="billMastDAO">
+            <ref bean="billMastDAO" />
+        </property>
+        <property name="billGroupDAO">
+            <ref bean="billGroupDAO" />
+        </property>
+        <property name="sectionDefinationDAO">
+            <ref bean="sectionDefinationDAO" />
+        </property>
+        <property name="aqmastDAO">
+            <ref bean="aqmastDAO" />
+        </property>
+        <property name="employeeDAO">
+            <ref bean="employeeDAO" />
+        </property>
+        <property name="aqDtlsDAO">
+            <ref bean="aqDtlsDAO"/>
+        </property>                        
+        <property name="allowanceDeductionDAO">
+            <ref bean="allowanceDeductionDAO"/>
+        </property>
+        <property name="loanSancDAO">
+            <ref bean="loanSancDAO"/>
+        </property>
+        <property name="licDAO">
+            <ref bean="licDAO"/>
+        </property>
+        <property name="empQtrAllotmentDAO">
+            <ref bean="empQtrAllotmentDAO"/>
+        </property>
+    </bean>
+    
+    <bean id="aqmastDAO" class="hrms.dao.payroll.aqmast.AqmastDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="aqDtlsDAO" class="hrms.dao.payroll.aqdtls.AqDtlsDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="callableRegularPayBill" class="hrms.thread.paybill.CallableRegularPayBill">
+        <property name="processPayBillService">
+            <ref bean="processPayBillService" />
+        </property>        
+    </bean>
+    
+    <bean id="callableArrearPayBill" class="hrms.thread.paybill.CallableArrearPayBill">
+        <property name="processPayBillService">
+            <ref bean="processPayBillService" />
+        </property>
+        <property name="processArrearBillService">
+            <ref bean="processArrearBillService" />
+        </property>
+    </bean>
+    
+    <bean id="empQtrAllotmentDAO" class="hrms.dao.empqtrallotment.EmpQtrAllotmentDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="licServ" class="hrms.dao.payroll.services.LICScheduleServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+    </bean>
+    <bean id="serviceBookDao" class="hrms.dao.servicebook.ServiceBookDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+        <property name="uploadPath" value="D:\esbsupportingdoc"/>        
+    </bean>
+   
+    
+    
+    
+    
+    <!--  <bean id="maxPromotionIdDAO" class="hrms.dao.promotion.MaxPromotionIdDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="promotionDAO" class="hrms.dao.promotion.PromotionDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+        <property name="maxPromotionIdDAO">
+            <ref bean="maxPromotionIdDAO" />
+        </property>
+        <property name="emppayrecordDAO">
+            <ref bean="emppayrecordDAO"/>
+        </property>
+    </bean>-->
+    <bean id="gpHeadDAO" class="hrms.dao.GPHeadUpdate.GPHeadDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="subDivisionDAO" class="hrms.dao.master.SubDivisionDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>        
+    </bean>
+    <bean id="blockDAO" class="hrms.dao.master.BlockDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="cmgiepfDAO" class="hrms.dao.cmgiepf.CmgiEpfDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>       
+    </bean>
+    <bean id="cmgiptDAO" class="hrms.dao.cmgipt.CmgiPtDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="employeeGrievanceDAO" class="hrms.dao.miscellaneous.EmployeeGrievanceDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>        
+        <property name="uploadPath" value="/workflow/grievance" />
+    </bean>
+    <bean id="workflowRoutingDao" class="hrms.dao.workflowrouting.WorkflowRoutingDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="downloadDAO" class="hrms.dao.common.DownloadDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="annuaiEstablishmentDao" class="hrms.dao.report.annualestablishment.AnnuaiEstablishmentReportDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    
+    <bean id="bankAppFormServ" class="hrms.dao.payroll.services.BankAppFormServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+    </bean>
+    
+    <bean id="daCertificateServ" class="hrms.dao.payroll.services.DACertificateServices"></bean>
+    
+    <bean id="excessPayServ" class="hrms.dao.payroll.services.ExcessPayScheduleServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+    </bean>
+    <bean id="hcScheduleServ" class="hrms.dao.payroll.services.HCScheduleServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+    </bean>
+    <bean id="groupWiseSanctionedStrengthDAO" class="hrms.dao.report.groupwisesanctionedstrength.GroupWiseSanctionedStrengthDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="officeWiseSanctionedStrengthDAO" class="hrms.dao.report.officewisesanctionedstrength.OfficeWiseSanctionedStrengthDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    
+    <bean id="itScheduleArrearDAO" class="hrms.dao.payroll.arrear.ITScheduleArrearDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    <bean id="npsArrearDAO" class="hrms.dao.payroll.arrear.NPSArrearDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    
+    <bean id="ltcScheduleServices" class="hrms.dao.payroll.services.LTCScheduleServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+    </bean>
+    <bean id="gpfArrearDAO" class="hrms.dao.payroll.arrear.GPFArrearDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    <bean id="ptArrearDAO" class="hrms.dao.payroll.arrear.PTScheduleArrearDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    <bean id="bankAccountScheduleArrearDAO" class="hrms.dao.payroll.arrear.BankAccountScheduleArrearDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    <bean id="beneficiaryListArrearDAO" class="hrms.dao.payroll.arrear.BeneficiaryListArrearDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    <bean id="generateTokenArrearBillService" class="hrms.service.GenerateTokenArrearBillService">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="callableTokenArrearBill" class="hrms.thread.paybill.CallableTokenArrearBill">
+        <property name="generateTokenArrearBillService">
+            <ref bean="generateTokenArrearBillService" />
+        </property>
+    </bean>
+    
+    <bean id="generateError" class="hrms.service.GenerateErrorService">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="callableErrorBill" class="hrms.thread.paybill.CallableErrorBill">
+        <property name="generateError">
+            <ref bean="generateError" />
+        </property>
+    </bean>
+    <bean id="uploadBillService" class="hrms.service.UploadBillService">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="callableUploadBill" class="hrms.thread.paybill.CallableUploadBill">
+        <property name="uploadBillService">
+            <ref bean="uploadBillService" />
+        </property>
+    </bean>
+    
+    <bean id="downloadBillService" class="hrms.service.DownloadFilesFromiOTMSService">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="serviceCloserDAO" class="hrms.dao.servicecloser.ServiceCloserDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    
+    <bean id="callableDownloadFiles" class="hrms.thread.paybill.CallableDownloadFiles">
+        <property name="downloadBillService">
+            <ref bean="downloadBillService" />
+        </property>
+    </bean>
+    <bean id="aisgisScheduleServices" class="hrms.dao.payroll.services.AISGISScheduleServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+    </bean>
+    <bean id="leaveDao" class="hrms.dao.leave.LeaveDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>           
+    
+    <bean id="annexureIServices" class="hrms.dao.payroll.services.AnnexureIDMPServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+    </bean>
+    <bean id="annexureIIServices" class="hrms.dao.payroll.services.AnnexureIIDMPServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+    </bean>
+    <bean id="annexureIIIServices" class="hrms.dao.payroll.services.AnnexureIIIDMPServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+    </bean>
+    <bean id="annexureIIIFormat2Services" class="hrms.dao.payroll.services.AnnexureIIIFormat2DMPServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+    </bean>
+    
+    <bean id="vehicleScheduleServices" class="hrms.dao.payroll.services.VehicleScheduleDMPServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+    </bean>
+    
+    <bean id="vacancyStatementServices" class="hrms.dao.payroll.services.VacancyStatementDMPServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+    </bean>
+    
+    <bean id="voucherSlipServices" class="hrms.dao.payroll.services.VoucherSlipDMPServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+    </bean>
+    
+    <bean id="aqReportIIServices" class="hrms.dao.payroll.services.AquitanceReportIIServices">
+        <property name="paybillDmpDao" ref="paybillDmpDao"/>
+        <property name="billFrontPageDmpDao" ref="billFrontPageDmpDao"/>
+    </bean>
+    
+    <bean id="contractualEmployeeAssignPost" class="hrms.dao.ContractualEmployeeAssignPost.ContractualEmployeeAssignPostDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="maxPromotionIdDAO" class="hrms.dao.promotion.MaxPromotionIdDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="promotionDAO" class="hrms.dao.promotion.PromotionDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="maxPromotionIdDAO">
+            <ref bean="maxPromotionIdDAO"/>
+        </property>
+        <property name="emppayrecordDAO">
+            <ref bean="emppayrecordDAO"/>
+        </property>
+        <property name="cadreDAO">
+            <ref bean="cadreDAO"/>
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    
+    <bean id="maxCadreIdDAO" class="hrms.dao.master.MaxCadreIdDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="empQuarterAllotDAO" class="hrms.dao.EmpQuarterAllotment.EmpQuarterAllotDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="notificationDao">
+            <ref bean="notificationDao" />
+        </property> 
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+
+        <property name="uploadPath" value="E:\quarterTracking"/>
+        <property name="uploadPathqrt" value="E:\estatecourt"/> 
+    </bean>
+    <bean id="createEmployeeDao" class="hrms.dao.createEmployee.CreateEmployeeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="payBillDAO" class="hrms.dao.payroll.paybill.PayBillDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="gpfEightyColService" class="hrms.dao.payroll.services.GPFScheduleEightyColServices">
+        <property name="comonScheduleDao" ref="comonScheduleDao"/>
+    </bean>
+    <bean id="gisTypeDAO" class="hrms.dao.master.GisTypeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="maritalStatusDAO" class="hrms.dao.master.MaritalStatusDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+   
+    <bean id="categoryDAO" class="hrms.dao.master.CategoryDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="bloodGroupDAO;" class="hrms.dao.master.BloodGroupDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="religionDAO" class="hrms.dao.master.ReligionDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="generateVoucher" class="hrms.service.GenerateVoucherService">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="callableVoucherBill" class="hrms.thread.paybill.CallableVoucherBill">
+        <property name="generateVoucher">
+            <ref bean="generateVoucher" />
+        </property>
+    </bean>
+    
+    <bean id="identityTypeDAO" class="hrms.dao.master.IdentityTypeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="generateObjection" class="hrms.service.GenerateObjectionService">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="callableObjectionBill" class="hrms.thread.paybill.CallableObjectionBill">
+        <property name="generateObjection">
+            <ref bean="generateObjection" />
+        </property>
+    </bean>
+    
+    <bean id="recruitmentDAO" class="hrms.dao.recruitment.RecruitmentDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="emppayrecordDAO">
+            <ref bean="emppayrecordDAO"/>
+        </property>
+        <property name="cadreDAO">
+            <ref bean="cadreDAO"/>
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+
+    </bean>
+    
+    <bean id="maxRegularizationServiceIDDAO" class="hrms.dao.regularizationService.MaxRegularizationServiceIDDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="regularizeServiceDAO" class="hrms.dao.regularizationService.RegularizationServiceDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="maxRegularizationServiceIDDAO">
+            <ref bean="maxRegularizationServiceIDDAO"/>
+        </property>
+        <property name="notificationDao">
+            <ref bean="notificationDao" />
+        </property> 
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+
+    </bean>
+    
+    <bean id="paySlipIDMPServices" class="hrms.dao.payroll.services.PaySlipIDMPServices">
+        <property name="payslipDao">
+            <ref bean="payslipDao"/>
+        </property>
+    </bean>
+    
+    
+    
+    <bean id="payFixationDAO" class="hrms.dao.payfixation.PayFixationDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+        <property name="emppayrecordDAO">
+            <ref bean="emppayrecordDAO"/>
+        </property>
+        
+        <property name="notificationDao">
+            <ref bean="notificationDao"/>
+        </property>        
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>                
+    </bean>
+    
+    <bean id="paySlipIIDMPServices" class="hrms.dao.payroll.services.PaySlipIIDMPServices">
+        <property name="payslipDao">
+            <ref bean="payslipDao"/>
+        </property>
+    </bean>
+    <bean id="aqfunctionalities" class="hrms.common.AqFunctionalities">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="ltaDAO" class="hrms.dao.loancorrection.LTACorrectionDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="postingDAO" class="hrms.dao.posting.PostingDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+        <property name="maxTransferIdDao">
+            <ref bean="maxTransferIdDao"/>
+        </property>
+        <property name="emppayrecordDAO">
+            <ref bean="emppayrecordDAO"/>
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    <bean id="suspensionDAO" class="hrms.dao.suspension.SuspensionDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+        
+        <property name="empinfoDAO">
+            <ref bean="empinfoDAO"/>
+        </property>
+    </bean>
+    <bean id="familyRelationTypeDAO" class="hrms.dao.master.FamilyRelationTypeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="reinstatementDAO" class="hrms.dao.reinstatement.ReinstatementDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    <bean id="rewardDao" class="hrms.dao.reward.RewardDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    <bean id="punishmentDAO" class="hrms.dao.punishment.PunishmentDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="maxAdActionIdDAO">
+            <ref bean="maxAdActionIdDAO" />
+        </property>
+        <property name="notificationDao">
+            <ref bean="notificationDao" />
+        </property>        
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>            
+        </property>
+
+    </bean>
+    <bean id="maxAdActionIdDAO" class="hrms.dao.punishment.MaxAdActionIdDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="categoryEmployeeReportDao" class="hrms.dao.misreport.CategoryEmployeeReportDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="brassallotDao" class="hrms.dao.brassallot.BrassAllotDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="maxnotiidDao">
+            <ref bean="maxnotiidDao" />
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    <bean id="LanguageDao" class="hrms.dao.master.LanguageDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="GisPassbookDAO" class="hrms.dao.report.gispassbook.GisPassbookDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="leaveSanctionDAO" class="hrms.dao.leaveSanction.LeaveSanctionDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    <bean id="maxServiceVerificatioIdDAO" class="hrms.dao.serviceVerification.MaxServiceVerificatioIdDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="serviceVerificationDAO" class="hrms.dao.serviceVerification.ServiceVerificationDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="maxServiceVerificatioIdDAO">
+            <ref bean="maxServiceVerificatioIdDAO" />
+        </property>
+    </bean>
+    <bean id="contractualToRegularDAO" class="hrms.dao.ContractualToRegular.ContractualToRegularDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="cctnsDAO" class="hrms.ws.client.cctns.CctnsDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="districtWiseEmployeeData" class="hrms.dao.report.districtwiseemployeedata.DistrictWiseEmployeeDataDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="loanreleaseDAO" class=" hrms.dao.loanrelease.LoanreleaseDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="notificationDao">
+            <ref bean="notificationDao" />
+        </property> 
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+
+    </bean>
+    <bean id="repaymentDAO" class=" hrms.dao.repayment.RepaymentDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="notificationDao">
+            <ref bean="notificationDao" />
+        </property> 
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+
+    </bean>
+    <bean id="qualificationDAO" class="hrms.dao.master.QualificationDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="facultyDAO" class="hrms.dao.master.FacultyDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="budgetRequirementDAO" class="hrms.dao.report.budgetRequirement.BudgetRequirementDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="MiscLeaveDAO" class="hrms.dao.leave.MiscLeaveDAOImpl">
+        <property name="maxleaveidDao">
+            <ref bean="maxleaveidDao" />
+        </property>
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+
+    </bean> 
+    <bean id="degreeeDAO" class="hrms.dao.master.DegreeeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="universityDAO" class="hrms.dao.master.UniversityDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="policeStationDAO" class="hrms.dao.master.PoliceStationDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean> 
+    <bean id="postOfficeDAO" class="hrms.dao.master.PostOfficeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="villageDAO" class="hrms.dao.master.VillageDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="headquarterleavingDao" class="hrms.dao.headquarterleaving.HeadQuarterLeavingDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="notificationDao">
+            <ref bean="notificationDao" />
+        </property> 
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    <bean id="officelistDao" class="hrms.dao.misreport.OfficeListDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="officeWisePostGroupDao" class="hrms.dao.report.officewisepostgroup.OfficeWisePostGroupImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="importEmpExlDao" class="hrms.dao.importemployee.ImportEmpDetailsExcelDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="substantivePostListDao" class="hrms.dao.report.substantivepostlist.SubstantivePostListImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="deptWiseAerSubmittedDAO" class="hrms.dao.deptwiseaersubmitted.DeptWiseAerSubmittedDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="TransferProposalDAO" class="hrms.dao.TransferProposal.TransferProposalDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="allotmentToCadreDAO" class="hrms.dao.allotmentToCadre.AllotmentToCadreDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="emppayrecordDAO">
+            <ref bean="emppayrecordDAO"/>
+        </property>
+        <property name="cadreDAO">
+            <ref bean="cadreDAO"/>
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+        <property name="notificationDao">
+            <ref bean="notificationDao"/>
+        </property> 
+    </bean>
+    <bean id="relieveCadreDAO" class="hrms.dao.relieveCadre.RelieveCadreDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="emppayrecordDAO">
+            <ref bean="emppayrecordDAO"/>
+        </property>
+        <property name="cadreDAO">
+            <ref bean="cadreDAO"/>
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+        <property name="notificationDao">
+            <ref bean="notificationDao"/>
+        </property>        
+    </bean>
+    <bean id="trainingDao" class="hrms.dao.training.TrainingDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    <bean id="trainingTitleDao" class="hrms.dao.master.TrainingTitleDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="trainingTypeDao" class="hrms.dao.master.TrainingTypeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="joiningCadreDAO" class="hrms.dao.joiningCadre.JoiningCadreDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="emppayrecordDAO">
+            <ref bean="emppayrecordDAO"/>
+        </property>
+        <property name="cadreDAO">
+            <ref bean="cadreDAO"/>
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    <bean id="postSanctionStrengthDAO" class="hrms.dao.misreport.PostSanctionStrengthDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="conclusionProceedingsDAO" class="hrms.dao.conclusionproceedings.ConclusionProceedingsDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+        <property name="notificationDao">
+            <ref bean="notificationDao"/>
+        </property>
+        <property name="uploadPath" value="D:\ConclusionProceeding"/>
+    </bean>
+    <bean id="empTpfDao" class="hrms.dao.tpfreport.EmpTpfDetailsDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="singlePayDao" class="hrms.dao.SingleBill.SinglePayBillDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="investmentDeclarationDao" class="hrms.dao.itdeclaration.InvestmentDeclarationDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>    
+    <bean id="postproposalDao" class="hrms.dao.miscellaneous.PostProposalDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="aerAuthorizationDAO" class="hrms.dao.master.AerAuthorizationDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="tpfArrearDAO" class="hrms.dao.payroll.arrear.TPFArrearDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    <bean id="profileUpdatedDAO" class="hrms.dao.payroll.schedule.ProfileUpdatedDAOIMPL">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    <bean id="budgetDAO" class="hrms.dao.budgetproposal.BudgetProposoalDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    <bean id="agLTADAO" class="hrms.dao.AgLta.AgLtaDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    <bean id="superannuationProjectionDAO" class="hrms.dao.report.superannuationProjectionReport.SuperannuationProjectionReportDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    <bean id="beneficiaryMismatchReportDAO" class="hrms.dao.payroll.beneficiaryMismatchReport.BeneficiaryMismatchReportDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    <bean id="IncomeTaxDAO" class="hrms.dao.IncomeTax.IncomeTaxDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean> 
+    <bean id="postTerminationDAO" class="hrms.dao.report.posttermination.PostTerminationDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    <bean id="managePvtDeductionDAO" class="hrms.dao.payroll.managePvtDeduction.ManagePvtDeductionDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    <bean id="sbDAO" class="hrms.dao.leaveAccount.ServiceBookLanguageDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="transferContractualDAO" class="hrms.dao.transfer.TransferContractualDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="joiningContractualDAO" class="hrms.dao.joining.JoiningContractualDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="queryBuilderDAO" class="hrms.dao.misreport.QueryBuilderDAOImpl">
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    <bean id="LTCDAO" class="hrms.dao.ltc.LTCDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    <bean id="contIncrDAO" class="hrms.dao.incrementsanction.IncrementForSanctionContractualDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    
+    <bean id="LPCReportDao" class="hrms.dao.payroll.LPC.LPCReportDAOImpl">       
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="agpensionDAO" class="hrms.dao.AGPension.AGPensionDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="PropertyStatementAdminDAO" class="hrms.dao.propertystatement.PropertyStatementAdminDAOIMPL">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+        <property name="uploadPath" value="D:\PropertyStatementDocument"/>
+    </bean>
+    <bean id="trainingDAO" class="hrms.dao.master.TrainingMasterDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>        
+    </bean> 
+    <bean id="confirmationOfServiceDAO" class="hrms.dao.confirmationofservice.ConfirmationOfServiceDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="servicerecordDAO" class="hrms.dao.servicerecord.ServiceRecordDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="otherSPCDAO" class="hrms.dao.master.OtherSPCDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="pensionNocDAO" class="hrms.dao.AGPension.PensionNOCDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="uploadPath" value="D:\vigilance"/> 
+    </bean>
+    <bean id="discProceedingAdminDAO" class="hrms.dao.discProceeding.DiscProceedingAdminDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    <bean id="nominationRollDAO" class="hrms.dao.policemodule.NominationRollDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+        <property name="uploadPath" value="D:\policeNominationDoc"/> 
+    </bean>
+    <bean id="recommendationDAO" class="hrms.dao.recommendation.RecommendationDAOImplw">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="pensionNocDAO">
+            <ref bean="pensionNocDAO" />
+        </property>
+        <property name="uploadPath" value="D:\recommendationdoc"/> 
+    </bean>
+    <bean id="asiNominationDAO" class="hrms.dao.policemodule.ASINominationDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    <bean id="RentDAO" class="hrms.dao.Rent.RentDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    <bean id="annualBudgetDAO" class="hrms.dao.annualBudget.AnnualBudgetDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    <bean id="SBMonitoringDAO" class="hrms.dao.SBMonitoring.SBMonitoringDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    <bean id="regularizeServiceContractualDAO" class="hrms.dao.regularizationService.RegularizationServiceContractualDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    <bean id="dpcConductedDAO" class="hrms.dao.dpcconducted.DPCConductedDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="deptartmentalExamDAO" class="hrms.dao.departmentalExam.DepartmentalExamDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="awardMedalDAO" class="hrms.dao.policemodule.AwardMedalDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    <bean id="gisDAO" class="hrms.dao.GIS.GISDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="PARCPromotionDAO" class="hrms.dao.performanceappraisal.PARCPromotionDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+        <property name="uploadPath" value="D:\GroupCPromotion"/>
+    </bean>    
+    <bean id="breakinserviceDAO" class="hrms.dao.breakinservice.BreakinserviceDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="notificationDao">
+            <ref bean="notificationDao" />
+        </property> 
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+
+    </bean>  
+    <bean id="roabsenceDAO" class="hrms.dao.roabsence.RoabsenceDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="notificationDao">
+            <ref bean="notificationDao" />
+        </property> 
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+
+    </bean>  
+    <bean id="FTCDAO" class="hrms.dao.ftc.FTCDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>    
+    <bean id="placementOfServiceDAO" class="hrms.dao.placementofservice.PlacementOfServiceDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean> 
+    <bean id="allowedtoOfficiateDAO" class="hrms.dao.allowedToOfficiate.AllowedToOfficiateDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="cadreDAO">
+            <ref bean="cadreDAO" />
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>  
+    <bean id="employeeWsForLMS" class="hrms.ws.EmployeeWSForLMS">
+        <property name="employeeDAO" ref="employeeDAO" />
+    </bean>
+    <bean id="payEntitlementDAO" class="hrms.dao.payentitlement.PayEntitlementDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean> 
+    <bean id="policeMISReportDAO" class="hrms.dao.policemodule.PoliceMISReportDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    <bean id="allowacesDao" class="hrms.dao.allowances.AllowancesDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="notificationDao">
+            <ref bean="notificationDao" />
+        </property> 
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    <bean id="QMSDAO" class="hrms.dao.EmpQuarterAllotment.QMSDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="uploadPath" value="E:\quarterTracking"/>       
+    </bean>
+    <bean id="edespatchDao" class="hrms.dao.eDespatch.eDespatchDAOImpl">
+    </bean>
+    <bean id="lttrainingDao" class="hrms.dao.LongTermTraining.longTermTrainingDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+        <property name="notificationDao">
+            <ref bean="notificationDao"/>
+        </property>        
+    </bean>
+    <bean id="enrollmentinsuranceDAO" class="hrms.dao.EnrollmentToInsurance.EnrollmenttoinsuranceDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="notificationDao">
+            <ref bean="notificationDao" />
+        </property> 
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>        
+    </bean>
+    <bean id="employeeNPSDataDAO" class="hrms.dao.report.EmployeeNPSDataReport.EmployeeNPSDataReportDAOImpl">
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    <bean id="equivalentPostDAO" class="hrms.dao.EquivalentPost.EquivalentPostDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>   
+        <property name="notificationDao">
+            <ref bean="notificationDao" />
+        </property> 
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>        
+    </bean>
+    <bean id="ministerDetailsDAO" class="hrms.dao.master.MinisterDetailsDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property> 
+    </bean> 
+    <bean id="mergeIDDao" class="hrms.dao.mergeHRMSID.mergeHrmsIDDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property> 
+    </bean>
+    <bean id="budgetDao" class="hrms.dao.Budget.BudgetSpecialStatementDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property> 
+    </bean> 
+    <bean id="npsdateDao" class="hrms.dao.Npsdata.npsDataDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property> 
+    </bean> 
+    <bean id="payInSRDao" class="hrms.dao.PayInServiceRecord.PayInServiceRecordDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property> 
+    </bean>
+    <bean id="deptReportDao" class="hrms.dao.misreport.DeptWiseReportDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property> 
+    </bean>
+    <bean id="supranReportDao" class="hrms.dao.Superannuation.SuperannuationDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property> 
+    </bean> 
+    <bean id="leaveUpdateDAO" class="hrms.dao.LeaveUpdateBalance.LeaveUpdateDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property> 
+    </bean> 
+    <bean id="esignBillDao" class="hrms.dao.esignBill.EsignBillDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property> 
+        <property name="PayBillPDf" value="/data/hrms/DigiPayBillPDf/"/>
+    </bean>
+    <bean id="salaryBillService" class="hrms.services.SalaryBillService">
+        <property name="aqReportDao">
+            <ref bean="aqReportDao"/>
+        </property>
+        <property name="paybillDmpDao">
+            <ref bean="paybillDmpDao"/>
+        </property>
+        <property name="billFrontPageDmpDao">
+            <ref bean="billFrontPageDmpDao"/>
+        </property>
+    </bean> 
+    <bean id="gradeDAO" class="hrms.dao.master.GradeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property> 
+    </bean>
+    <bean id="schedulepdfsignDAO" class="hrms.dao.payroll.schedule.ScheduePDFEsignDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="comonScheduleDao" ref="comonScheduleDao" />
+    </bean>
+    <bean id="qualificationMasterDAO" class="hrms.dao.master.QualificationMasterDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property> 
+    </bean>
+    <bean id="facultymasterDAO" class="hrms.dao.master.FacultyMasterDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="nominationRollRecommendCheckListDAO" class="hrms.dao.policemodule.NominationRollRecommendCheckListDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property> 
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    <bean id="eSignWDDAO" class="hrms.dao.eSignWD.eSignWDDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="certificatePath" value="E:\\esignpdf\\"/>
+        <!--<property name="authToken" value="1950b13e-5b1b-4f53-bd9e-348f34dca622"/>-->
+        <property name="authToken" value="fe79c3a7-30a0-4ee2-8697-d33a7fc2176d"/>
+    </bean>
+    <bean id="ddoDetailsDAO" class="hrms.dao.master.DdoDetailsDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"  />
+        </property>        
+    </bean>
+    <bean id="degreeDAO" class="hrms.dao.master.DegreeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="districtWiseEsignDAO" class="hrms.dao.master.DistrictWiseEsignDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"  />
+        </property>
+    </bean>
+    <bean id="subjectIdentityDAO" class="hrms.dao.master.SubjectIdentityDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="redesignationContractualDAO" class="hrms.dao.reemployment.RedesignationContractualDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource"  />
+        </property>
+    </bean>
+    <bean id="sbCorrectReqDao" class="hrms.dao.servicebook.SbCorrectionRequestDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    <bean id="censusReportDao" class="hrms.dao.master.CensusReportDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="nominationRollPDFDAO" class="hrms.dao.policemodule.NominationRollPDFDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="repodataSource">
+            <ref bean="repodataSource" />
+        </property>
+    </bean>
+    <bean id="empSanitizeDAO" class="hrms.dao.EmpSantize.EmpSanitizeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>        
+    <bean id="ddofeedbackDAO" class="hrms.dao.ddofeedback.DDOFeedbackDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="sipcadredao" class="hrms.dao.performanceappraisal.SIParCadreDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+     <bean id="pensionEmployeeDAO" class="hrms.dao.PensionEmployee.PensionEmployeeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+     <bean id="empSplCatgdao" class="hrms.dao.misreport.EmployeeSpecialCategoryReportDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+     <bean id="reAppointmentDAO" class="hrms.dao.reappointment.ReAppointmentDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="sbDAO">
+            <ref bean="sbDAO"/>
+        </property>
+    </bean>
+    <bean id="SearchEmployeeDAO" class="hrms.dao.employee.SearchEmployeeDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <bean id="reservationcategoryDao" class="hrms.dao.reservationcategory.ReservationCategoryInformationDAOImpl">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+</beans>

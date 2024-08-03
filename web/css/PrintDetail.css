@@ -1,0 +1,53 @@
+body {	font-family: Arial, Helvetica, sans-serif;}
+
+td {	font-family: Arial, Helvetica, sans-serif;}
+
+th {	font-family: Arial, Helvetica, sans-serif;}
+
+.printLabel				{font-family:verdana; font-size:10px; font-weight:bold;text-align: left;}
+.printLabelHeader{
+	font-family:verdana; 
+	font-size:10px; 
+	font-weight:bold;
+	text-align: left;
+	border-top:1px solid #666666;
+	border-left:1px solid #666666;
+	border-bottom:1px solid #666666;
+}
+.printSubLabel			{font-family:verdana; font-size:9px; font-weight:bold;text-align: left;}
+.printDataInner	{
+	font-family:verdana; 
+	font-size:10px;
+	text-transform: uppercase;
+	text-align: left;
+	border-top:1px solid #666666;
+	border-left:1px solid #666666;
+	border-bottom:1px solid #666666;
+}
+.printData	{
+	font-family:verdana; 
+	font-size:10px;
+	text-transform: uppercase;
+	text-align: left;
+}
+.printFooter			{font-family:verdana; font-size:8px;text-align: left;}
+.printSectionHeader		{font-family:verdana; font-size:12px; font-weight:bold;text-align: left;}
+.instructionLabel		{font-family:verdana; font-size:9px;}
+.alternateNormalTD{
+	height:20px;
+	background-color:#F3F9FF;
+	font:Verdana;
+	text-transform:uppercase;
+	text-align:center;
+	font-size: 10px;
+	font-weight: bold;
+}
+.alternateTD{
+	height:20px;
+	background-color:#E3E9F1;
+	font:Verdana;
+	text-transform:uppercase;
+	text-align:center;
+	font-size: 10px;
+	font-weight: bold;
+}

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<project name="HRMSOpensource" default="default" basedir=".">
+    <description>Builds, tests, and runs the project HRMSOpensource.</description>
+	<property name="projectname" value="HRMSOpensource"/>
+	<property name="src.dir" value="src"/>
+	<property name="web.dir" value="web"/>
+	<property name="class.dir" value="classes"/>
+	<property name="lib.dir" value="lib"/>
+	
+	<path id="master-classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+		<pathelement path="${class.dir}"/>
+	</path>
+	<target name="default" description="Compile source tree java files">		
+		<mkdir dir="${class.dir}"/>
+		<mkdir dir="dist"/>
+		<delete>
+			<fileset dir="${class.dir}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="dist">
+				<include name="*.war"/>
+			</fileset>
+		</delete>
+		<javac destdir="${class.dir}" includeantruntime="false">
+			<src path="${src.dir}"/>
+			<classpath refid="master-classpath"/>
+		</javac>
+	<!--
+		<copy todir="${class.dir}"> 
+			<fileset dir="${src.dir}/java" includes="Log4j2.xml"/>			
+  		</copy>
+		-->
+		
+		<copy file="${src.dir}/java/log4j2.xml" todir="${class.dir}"/>
+
+		<war destfile="dist/HRMSOpensource.war" webxml="${web.dir}/WEB-INF/web.xml">
+			<fileset dir="${web.dir}">
+				<include name="**/*.*"/>
+			</fileset>
+			<lib dir="lib">
+				<exclude name="portlet.jar"/>
+			</lib>
+			<classes dir="${class.dir}"/>
+		</war>
+
+	</target>
+	<target name="clean" description="Clean output directories">
+		<delete>
+			<fileset dir="${build.dir}">
+				<include name="**/*.class"/>
+			</fileset>
+		</delete>
+	</target>
+	
+</project>	

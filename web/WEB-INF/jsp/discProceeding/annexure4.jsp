@@ -1,0 +1,129 @@
+<%-- 
+    Document   : annexure4
+    Created on : Jun 27, 2018, 4:35:20 PM
+    Author     : manisha
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>:HRMS:</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">        
+        <link href="css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
+        <script src="js/moment.js" type="text/javascript"></script>
+        <script src="js/jquery.min.js" type="text/javascript"></script>        
+        <script src="js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+
+        <style type="text/css">
+            .headr{
+                font-weight: bold;
+                font-family: Verdana, Arial, Helvetica, sans-serif;
+                font-size: 16px;
+            }
+        </style>
+
+        <script language="javascript" type="text/javascript">
+            $(document).ready(function() {
+                $('#memoDate').datetimepicker({
+                    format: 'D-MMM-YYYY'
+                });
+            });
+            function saveMemo() {
+                var memoNo = $('#rule15MemoNo').val();
+                if (memoNo == '') {
+                    alert("Please enter Memorandum No");
+                    return false;
+                }
+                if (memoNo.length >= 18) {
+                    alert("Please Enter a Memorandum No between 1 and 18");
+                    return false;
+                }
+                var ordrDate = $('#rule15MemoDate').datebox('getValue');// will get the date value
+                if (ordrDate == '') {
+                    alert("Please enter Date");
+                    return false;
+                }
+                var charge = $('#annex1Charge').val();
+                if (charge.length >= 495) {
+                    alert("Please Enter value between 0 and 495");
+                    return false;
+                }
+
+            }
+        </script>
+    </head>
+    <body style="padding:0px;">        
+        <form:form action="discApprovedAction.htm" method="POST" commandName="witnessbean" class="form-inline">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="modal-title">IRREGULARITIES</h4>
+                </div>
+                <div class="panel-body">
+                    <form:hidden path="offCode"/>
+                    <form:hidden path="daId"/>
+                    <div align="center" width="99%" style="margin-top:5px;margin-bottom:10px;height:55%;">
+                        <div align="center" class="easyui-panel" title="IRREGULARITIES" width="99%">
+                            <table border="0" width="99%">
+
+                                <tr>
+                                    <td colspan="2" align="center" class="headr">Memo of Evidence<br><br></td>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center" class="headr">[Annexure-IV]<br><br></td>
+                                </tr>
+                            </table>
+
+                            <table width="100%" border="0" style="font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 13px;">
+
+                                <tr>
+                                    <td colspan="2" align="center" class="headr">Witness by whom charge is proposed to be sustained<br><br></td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+
+                            </table>
+                            <table width="100%" border="0" style="font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 13px;">
+
+                                <tr>
+                                    <td>
+                                        <%-- <c:forEach items="${discWitnessBean}" var="chargeBean" varStatus="cnt"> --%>
+                                        <c:forEach items="${witnessList}" var="witness">
+                                            <div style="padding-left: 30px;">
+                                                ${witness.empname}, ${witness.spn}
+                                                <label>Inside HRMS</label>
+                                            </div>
+                                        </c:forEach>
+                                    </td>
+                                    <td>
+                                        <c:forEach items="${witnessOtherList}" var="otherwitness">
+                                            <div style="padding-left: 30px;">
+                                               ${otherwitness.witnessName}, ${otherwitness.addressat}
+                                            <label>Outside HRMS</label>
+                                            </div>
+                                        </c:forEach>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+
+                            </table>
+                        </div>                    
+                    </div>
+                    <div class="panel-footer">
+                        <input type="submit" name="action" value="Back" class="btn btn-default"/> 
+                    </div>
+                </div>
+            </div>
+        </form:form>
+    </body>
+</html>
